@@ -1,0 +1,6 @@
+./bin/start_app.sh
+.DS_Store
+.idea
+__pycache__/
+*.numbers
+

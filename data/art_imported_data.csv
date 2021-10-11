@@ -1,0 +1,21 @@
+item_id ,title,artist,description,width,height,price,image_url,comment 
+1,CORDOBA 8x8,Garry,Oil & Graphite on Canvas,8,8,400,CORDOBA_8X8_M,
+2,CORDOBA 24x24,Garry,Oil & Graphite on Canvas,24,24,1200,CORDOBA_24X24_R,
+3,DEHLI 16x24,Garry,Oil & Graphite on Canvas,16,24,1500,DEHLI_16X24_M,
+4,DEHLI 32x32,Garry,Oil & Graphite on Canvas,32,32,3500,DEHLI_32X32_M,
+5,FLORENCE 8x8,Garry,Oil & Graphite on Canvas,8,8,400,FLORENCE_8X8_M,"2021 Mamaroneck Artist's Guild Small Works Exhibition, 2nd Place Award"
+6,FLORENCE 24x24,Garry,Oil & Graphite on Canvas,24,24,1500,FLORENCE_24X24_R,"2021 Carriage Barn Arts Center, Color+Art+Design Exhibition, New Canaan"
+7,MONTEREY 8x8,Garry,Oil & Graphite on Canvas,8,8,400,MONTEREY_8X8_M,
+8,MONTEREY 8x48 GREY,Garry,Oil & Graphite on Canvas,8,48,800,MONTEREY_8X48_GREY_R,
+9,MONTEREY 8x48 COLOR,Garry,Oil & Graphite on Canvas,8,48,1200,MONTEREY_8X48_COLOR_R,"2021 Arts Westchester, Calling All Creatives Exhibition"
+10,ROCINHA 4x16x16,Garry,Oil & Graphite on Canvas,33,33,2400,ROCINHA_4X16X16_M,
+11,ROCINHA 8x8,Garry,Oil & Graphite on Canvas,8,8,400,ROCINHA_8X8_M,
+12,ROCINHA 12x12,Garry,Oil & Graphite on Canvas,12,12,600,ROCINHA_12X12_R,
+13,ROCINHA 16x16,Garry,Oil & Graphite on Canvas,12,12,800,ROCINHA_16X16_R,
+14,ROCINHA 32x32,Garry,Oil & Graphite on Canvas,32,32,5000,ROCINHA_32X32_M,2021 Providence Art Club National Open Juried Exhibition
+15,TIMBUKTU 8x8,Garry,Oil & Graphite on Canvas,8,8,400,TIMBUKTU_8X8_M,
+16,TIMBUKTU 36X36,Garry,Oil & Graphite on Canvas,36,36,3000,TIMBUKTU_36X36_R,
+17,TOLEDO 8x8,Garry,Oil & Graphite on Canvas,8,8,400,TOLEDO_8X8_M,
+18,TOLEDO 12X12,Garry,Oil & Graphite on Canvas,12,12,600,TOLEDO_12X12_R,
+19,TOLEDO 16X16,Garry,Oil & Graphite on Canvas,16,16,800,TOLEDO_16X16_R,
+20,TOLEDO 24X24,Garry,Oil & Graphite on Canvas,24,24,800,TOLEDO_24X24_R,
