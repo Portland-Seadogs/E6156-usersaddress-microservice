@@ -32,14 +32,14 @@ def get_catalog_item(item_id):
 
 @app.route("/api/catalog", methods=['POST'])
 def add_new_catalog_item():
-    res = ArtCatalogResource.add_new_product(request.data)
+    res = ArtCatalogResource.add_new_product(request.get_json())
     rsp = Response(json.dumps(res), status=200, content_type="application/json")
     return rsp
 
 
 @app.route("/api/catalog/<int:item_id>", methods=['POST'])
 def update_catalog_item(item_id):
-    res = ArtCatalogResource.update_item_by_id(item_id, request.data)
+    res = ArtCatalogResource.update_item_by_id(item_id, request.get_json())
     rsp = Response(json.dumps(res), status=200, content_type="application/json")
     return rsp
 

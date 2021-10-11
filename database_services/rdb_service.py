@@ -133,18 +133,29 @@ def create_new_record(db_schema, table_name, **kwargs):
     :param kwargs: Dictionary of key, value arguments
     :return: Database record created, Throws RDBServiceException() if error occurs
     """
+    conn = _get_db_connection()
+    cur = conn.cursor()
+
     columns = [key for key in kwargs.keys()]
     value_placeholders = ["%s" for _ in kwargs.keys()]
     column_specifier = "(" + ", ".join(columns) + ")"
     value_specifier = "(" + ", ".join(value_placeholders) + ")"
-
     sql = (
         "INSERT INTO "
         + db_schema + "." + table_name
         + column_specifier
         + " VALUES " + value_specifier
     )
-    return _execute_db_commit_query(sql, [v for v in kwargs.values()])
+
+    try:
+        cur.execute(sql, args=[v for v in kwargs.values()])
+        new_row = cur.lastrowid
+        conn.commit()
+        return new_row
+    except Exception as e:
+        raise RDBServiceException(e)
+    finally:
+        conn.close()
 
 
 def delete_record_by_key(db_schema, table_name, key_column, item_id):

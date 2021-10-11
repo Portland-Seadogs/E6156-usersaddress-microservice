@@ -24,9 +24,10 @@ class ArtCatalogResource(BaseApplicationResource):
 
     @classmethod
     def add_new_product(cls, item_information):
-        return d_service.create_new_record(
+        new_record_id = d_service.create_new_record(
             cls.db_schema, cls.table_name, **item_information
         )
+        return {"item_id": new_record_id}
 
     @classmethod
     def update_item_by_id(cls, item_id, updated_information):
