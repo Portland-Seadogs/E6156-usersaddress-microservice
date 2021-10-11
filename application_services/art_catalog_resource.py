@@ -17,7 +17,25 @@ class ArtCatalogResource(BaseApplicationResource):
         return d_service.fetch_all_records(cls.db_schema, cls.table_name)
 
     @classmethod
-    def get_by_name_prefix(cls, name_prefix):
-        return d_service.get_by_prefix(
-            cls.db_schema, cls.table_name, "", name_prefix
+    def retrieve_single_record(cls, record_id):
+        return d_service.find_by_template(
+            cls.db_schema, cls.table_name, {"item_id": record_id}
+        )
+
+    @classmethod
+    def add_new_product(cls, item_information):
+        return d_service.create_new_record(
+            cls.db_schema, cls.table_name, **item_information
+        )
+
+    @classmethod
+    def update_item_by_id(cls, item_id, updated_information):
+        return d_service.update_record(
+            cls.db_schema, cls.table_name, "item_id", item_id, **updated_information
+        )
+
+    @classmethod
+    def delete_item_by_id(cls, record_id):
+        return d_service.delete_record_by_key(
+            cls.db_schema, cls.table_name, "item_id", record_id
         )
