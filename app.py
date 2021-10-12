@@ -16,38 +16,62 @@ def health_check():
     return "<u>Hello World</u>"
 
 
-@app.route("/api/catalog", methods=['GET'])
+@app.route("/api/catalog", methods=["GET"])
 def get_full_catalog():
     res = ArtCatalogResource.retrieve_all_records()
     rsp = Response(json.dumps(res), status=200, content_type="application/json")
     return rsp
 
 
-@app.route("/api/catalog/<int:item_id>", methods=['GET'])
+@app.route("/api/catalog/<int:item_id>", methods=["GET"])
 def get_catalog_item(item_id):
     res = ArtCatalogResource.retrieve_single_record(item_id)
     rsp = Response(json.dumps(res), status=200, content_type="application/json")
     return rsp
 
 
-@app.route("/api/catalog", methods=['POST'])
+@app.route("/api/catalog", methods=["POST"])
 def add_new_catalog_item():
     res = ArtCatalogResource.add_new_product(request.get_json())
     rsp = Response(json.dumps(res), status=200, content_type="application/json")
     return rsp
 
 
-@app.route("/api/catalog/<int:item_id>", methods=['POST'])
+@app.route("/api/catalog/<int:item_id>", methods=["POST"])
 def update_catalog_item(item_id):
-    res = ArtCatalogResource.update_item_by_id(item_id, request.get_json())
-    rsp = Response(json.dumps(res), status=200, content_type="application/json")
+    fields_to_update = request.get_json()
+    res = ArtCatalogResource.update_item_by_id(item_id, fields_to_update)
+
+    if res == 1:
+        fields_to_update.update({"item_id": item_id, "status": "updated"})
+        rsp = Response(
+            json.dumps(fields_to_update), status=200, content_type="application/json"
+        )
+    else:
+        rsp = Response(
+            json.dumps({"item_id": item_id, "status": "error"}),
+            status=500,
+            content_type="application/json",
+        )
     return rsp
 
 
-@app.route("/api/catalog/<int:item_id>", methods=['DELETE'])
+@app.route("/api/catalog/<int:item_id>", methods=["DELETE"])
 def delete_catalog_item(item_id):
     res = ArtCatalogResource.delete_item_by_id(item_id)
-    rsp = Response(json.dumps(res), status=200, content_type="application/json")
+
+    if res == 1:
+        rsp = Response(
+            json.dumps({"item_id": item_id, "status": "deleted"}),
+            status=200,
+            content_type="application/json",
+        )
+    else:
+        rsp = Response(
+            json.dumps({"item_id": item_id, "status": "error"}),
+            status=500,
+            content_type="application/json",
+        )
     return rsp
 
 
