@@ -7,7 +7,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger()
 
-app = Flask(__name__)
+application = app = Flask(__name__)
 CORS(app)
 
 
@@ -76,4 +76,4 @@ def delete_catalog_item(item_id):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    application.run(host="0.0.0.0", port=5000)
