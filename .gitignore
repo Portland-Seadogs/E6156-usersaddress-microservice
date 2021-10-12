@@ -1,4 +1,4 @@
-./bin/start_app.sh
+bin/start_app.sh
 .DS_Store
 .idea
 __pycache__/
