@@ -82,12 +82,16 @@ def get_user(id):
         return rsp
 
 
-@app.route("/users/<id>/address", methods=["GET", "POST"])
-def address_by_user():
-    res = ArtCatalogResource.add_new_product(request.get_json())
-    rsp = Response(json.dumps(res), status=200,
-                   content_type="application/json")
-    return rsp
+@app.route('/users/<user_id>/address', methods=['GET', 'POST'])
+def get_user_address(user_id):
+    # res = RDBService.get_by_prefix(db_schema, table_name, column_name, prefix)
+    # rsp = Response(json.dumps(res, default=str), status=200,
+    #                content_type="application/json")
+    # return rsp
+    if request.method == 'GET':
+        pass
+    if request.method == 'POST':
+        pass
 
 
 @app.route('/addresses', methods=['GET', 'POST'])
