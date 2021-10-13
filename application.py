@@ -1,6 +1,7 @@
 from flask import Flask, Response, request
 from flask_cors import CORS
 from application_services.users_resource import UsersResource
+from application_services.address_resource import AddressResource
 import json
 import logging
 
@@ -22,10 +23,12 @@ def get_all_users():
         address_id = request.args.get("addressID")
         # TODO : make query parameter filtering more general
         if address_id:
-            res = UsersResource.retrieve_filtered_records_by_address(address_id)
+            res = UsersResource.retrieve_filtered_records_by_address(
+                address_id)
         else:
             res = UsersResource.retrieve_all_records()
-        rsp = Response(json.dumps(res), status=200, content_type="application/json")
+        rsp = Response(json.dumps(res), status=200,
+                       content_type="application/json")
         return rsp
     if request.method == "POST":
         # TODO: add error checking
@@ -41,7 +44,8 @@ def get_all_users():
 def get_user(id):
     if request.method == "GET":
         res = UsersResource.retrieve_single_record(id)
-        rsp = Response(json.dumps(res), status=200, content_type="application/json")
+        rsp = Response(json.dumps(res), status=200,
+                       content_type="application/json")
         return rsp
 
     if request.method == "PUT":
@@ -78,13 +82,53 @@ def get_user(id):
         return rsp
 
 
-
-
 @app.route("/users/<id>/address", methods=["GET", "POST"])
 def address_by_user():
     res = ArtCatalogResource.add_new_product(request.get_json())
-    rsp = Response(json.dumps(res), status=200, content_type="application/json")
+    rsp = Response(json.dumps(res), status=200,
+                   content_type="application/json")
     return rsp
+
+
+@app.route('/addresses', methods=['GET', 'POST'])
+def address_collection():
+    # res = RDBService.get_by_prefix(db_schema, table_name, column_name, prefix)
+    # rsp = Response(json.dumps(res, default=str), status=200,
+    #                content_type="application/json")
+    # return rsp
+    res = AddressResource.get_by_template(None)
+    rsp = Response(json.dumps(res, default=str), status=200,
+                   content_type="application/json")
+    return rsp
+
+
+@app.route('/addresses/<address_id>', methods=['GET', 'PUT', 'DELETE'])
+def specific_address(address_id):
+    # res = RDBService.get_by_prefix(db_schema, table_name, column_name, prefix)
+    # rsp = Response(json.dumps(res, default=str), status=200,
+    #                content_type="application/json")
+    # return rsp
+    if request.method == 'GET':
+        res = AddressResource.get_address_record(address_id)
+        rsp = Response(json.dumps(res, default=str), status=200,
+                       content_type="application/json")
+        return rsp
+    if request.method == 'PUT':
+        pass  # NOT SURE WHAT TO DO FOR PUT
+    if request.method == 'DELETE':
+        res = AddressResource.delete_address(address_id)
+        rsp = Response(json.dumps(res, default=str), status=200,
+                       content_type="application/json")
+        return rsp
+
+
+@app.route('/addresses/<address_id>/users', methods=['GET', 'POST'])
+def get_address_users(address_id):
+    # res = RDBService.get_by_prefix(db_schema, table_name, column_name, prefix)
+    # rsp = Response(json.dumps(res, default=str), status=200,
+    #                content_type="application/json")
+    # return rsp
+    pass
 
 
 @app.route("/api/catalog/<int:item_id>", methods=["POST"])
