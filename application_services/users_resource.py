@@ -1,5 +1,5 @@
 from application_services.base_application_resource import BaseApplicationResource
-import database_services.rdb_service as d_service
+from database_services.rdb_service import RDBService as d_service
 
 
 class UsersResource(BaseApplicationResource):

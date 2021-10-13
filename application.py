@@ -17,7 +17,7 @@ def health_check():
 
 
 @app.route("/users", methods=["GET", "POST"])
-def get_full_catalog():
+def get_all_users():
     if request.method == "GET":
         address_id = request.args.get("addressID")
         # TODO : make query parameter filtering more general
@@ -38,7 +38,7 @@ def get_full_catalog():
 
 
 @app.route("/users/<id>", methods=["GET", "PUT", "DELETE"])
-def get_catalog_item(id):
+def get_user(id):
     if request.method == "GET":
         res = UsersResource.retrieve_single_record(id)
         rsp = Response(json.dumps(res), status=200, content_type="application/json")
@@ -80,8 +80,8 @@ def get_catalog_item(id):
 
 
 
-@app.route("/api/catalog", methods=["POST"])
-def add_new_catalog_item():
+@app.route("/users/<id>/address", methods=["GET", "POST"])
+def address_by_user():
     res = ArtCatalogResource.add_new_product(request.get_json())
     rsp = Response(json.dumps(res), status=200, content_type="application/json")
     return rsp
