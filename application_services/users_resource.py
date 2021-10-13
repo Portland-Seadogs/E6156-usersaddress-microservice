@@ -62,3 +62,10 @@ class UsersResource(BaseApplicationResource):
         return d_service.delete_record_by_key(
             cls.db_schema, cls.table_name, "ID", record_id
         )
+
+    @classmethod
+    def retrieve_addressid_for_userid(cls, user_id):
+        record = cls.retrieve_single_record(user_id)
+        print(record)
+        print(type(record))
+        return record[0]["addressID"]

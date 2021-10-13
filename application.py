@@ -21,7 +21,7 @@ def health_check():
 def get_all_users():
     if request.method == "GET":
         address_id = request.args.get("addressID")
-        # TODO : make query parameter filtering more general
+        # TODO : make query parameter filtering more general?
         if address_id:
             res = UsersResource.retrieve_filtered_records_by_address(
                 address_id)
@@ -84,15 +84,15 @@ def get_user(id):
 
 @app.route('/users/<user_id>/address', methods=['GET', 'POST'])
 def get_user_address(user_id):
-    # res = RDBService.get_by_prefix(db_schema, table_name, column_name, prefix)
-    # rsp = Response(json.dumps(res, default=str), status=200,
-    #                content_type="application/json")
-    # return rsp
     if request.method == 'GET':
+        addressID = UsersResource.retrieve_addressid_for_userid(user_id)
+        res = AddressResource.get_address_record(addressID)
+        rsp = Response(json.dumps(res), status=200,
+                       content_type="application/json")
+        return rsp
+    if request.method == "POST":
+        # TODO: implement...not sure what post should do here
         pass
-    if request.method == 'POST':
-        pass
-
 
 @app.route('/address', methods=['GET', 'POST'])
 def address_collection():
@@ -156,51 +156,18 @@ def specific_address(id):
         return rsp
 
 
-@app.route('/addresses/<address_id>/users', methods=['GET', 'POST'])
+@app.route('/address/<address_id>/users', methods=['GET', 'POST'])
 def get_address_users(address_id):
-    # res = RDBService.get_by_prefix(db_schema, table_name, column_name, prefix)
-    # rsp = Response(json.dumps(res, default=str), status=200,
-    #                content_type="application/json")
-    # return rsp
-    pass
-
-
-@app.route("/api/catalog/<int:item_id>", methods=["POST"])
-def update_catalog_item(item_id):
-    fields_to_update = request.get_json()
-    res = ArtCatalogResource.update_item_by_id(item_id, fields_to_update)
-
-    if res == 1:
-        fields_to_update.update({"item_id": item_id, "status": "updated"})
-        rsp = Response(
-            json.dumps(fields_to_update), status=200, content_type="application/json"
-        )
-    else:
-        rsp = Response(
-            json.dumps({"item_id": item_id, "status": "error"}),
-            status=500,
-            content_type="application/json",
-        )
-    return rsp
-
-
-@app.route("/api/catalog/<int:item_id>", methods=["DELETE"])
-def delete_catalog_item(item_id):
-    res = ArtCatalogResource.delete_item_by_id(item_id)
-
-    if res == 1:
-        rsp = Response(
-            json.dumps({"item_id": item_id, "status": "deleted"}),
-            status=200,
-            content_type="application/json",
-        )
-    else:
-        rsp = Response(
-            json.dumps({"item_id": item_id, "status": "error"}),
-            status=500,
-            content_type="application/json",
-        )
-    return rsp
+    if request.method == "GET":
+        # gets all the users at address address_id
+        res = UsersResource.retrieve_filtered_records_by_address(
+            address_id)
+        print(res)
+        rsp = Response(json.dumps(res), status=200,
+                       content_type="application/json")
+        return rsp
+    if request.method == "POST":
+        # TODO: Implement this! not exactly sure what this would do
 
 
 if __name__ == "__main__":
