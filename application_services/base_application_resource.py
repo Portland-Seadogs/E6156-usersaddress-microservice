@@ -10,6 +10,7 @@ class BaseApplicationResource(ABC):
     def __init__(self):
         pass
 
+    @classmethod
     @abstractmethod
-    def get_links(self, resource_data):
+    def get_links(cls, resource_data):
         pass

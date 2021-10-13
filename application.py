@@ -1,6 +1,6 @@
 from flask import Flask, Response, request
 from flask_cors import CORS
-from application_services.art_catalog_resource import ArtCatalogResource
+from application_services.users_resource import UsersResource
 import json
 import logging
 
@@ -16,18 +16,68 @@ def health_check():
     return "<u>Hello World</u>"
 
 
-@app.route("/api/catalog", methods=["GET"])
+@app.route("/users", methods=["GET", "POST"])
 def get_full_catalog():
-    res = ArtCatalogResource.retrieve_all_records()
-    rsp = Response(json.dumps(res), status=200, content_type="application/json")
-    return rsp
+    if request.method == "GET":
+        address_id = request.args.get("addressID")
+        # TODO : make query parameter filtering more general
+        if address_id:
+            res = UsersResource.retrieve_filtered_records_by_address(address_id)
+        else:
+            res = UsersResource.retrieve_all_records()
+        rsp = Response(json.dumps(res), status=200, content_type="application/json")
+        return rsp
+    if request.method == "POST":
+        # TODO: add error checking
+        new_user_info = request.json
+        res = UsersResource.add_new_user(new_user_info)
+        rsp = Response(
+            json.dumps(res), status=200, content_type="application/json"
+        )
+        return rsp
 
 
-@app.route("/api/catalog/<int:item_id>", methods=["GET"])
-def get_catalog_item(item_id):
-    res = ArtCatalogResource.retrieve_single_record(item_id)
-    rsp = Response(json.dumps(res), status=200, content_type="application/json")
-    return rsp
+@app.route("/users/<id>", methods=["GET", "PUT", "DELETE"])
+def get_catalog_item(id):
+    if request.method == "GET":
+        res = UsersResource.retrieve_single_record(id)
+        rsp = Response(json.dumps(res), status=200, content_type="application/json")
+        return rsp
+
+    if request.method == "PUT":
+        fields_to_update = request.get_json()
+        res = UsersResource.update_user_by_id(id, fields_to_update)
+        if res == 1:
+            fields_to_update.update({"id": id, "status": "updated"})
+            rsp = Response(
+                json.dumps(fields_to_update), status=200, content_type="application/json"
+            )
+        else:
+            rsp = Response(
+                json.dumps({"id": id, "status": "error"}),
+                status=500,
+                content_type="application/json",
+            )
+        return rsp
+
+    if request.method == "DELETE":
+        res = UsersResource.delete_user_by_id(id)
+
+        if res == 1:
+            rsp = Response(
+                json.dumps({"id": id, "status": "deleted"}),
+                status=200,
+                content_type="application/json",
+            )
+        else:
+            rsp = Response(
+                json.dumps({"id": id, "status": "error"}),
+                status=500,
+                content_type="application/json",
+            )
+        return rsp
+
+
 
 
 @app.route("/api/catalog", methods=["POST"])
