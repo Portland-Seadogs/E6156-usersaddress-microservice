@@ -9,6 +9,9 @@ class UserRDBService(RDBService):
     @classmethod
     def get_address_by_one_user(cls, user_id):
         addressquery = "select addressID from usersaddresses.users where users.ID =" + user_id
+        res = RDBService._execute_db_commit_query(addressquery)
+
+
 
 
 

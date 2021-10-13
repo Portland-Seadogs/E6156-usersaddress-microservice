@@ -94,19 +94,26 @@ def get_user_address(user_id):
         pass
 
 
-@app.route('/addresses', methods=['GET', 'POST'])
+@app.route('/address', methods=['GET', 'POST'])
 def address_collection():
     # res = RDBService.get_by_prefix(db_schema, table_name, column_name, prefix)
     # rsp = Response(json.dumps(res, default=str), status=200,
     #                content_type="application/json")
     # return rsp
-    res = AddressResource.get_by_template(None)
-    rsp = Response(json.dumps(res, default=str), status=200,
-                   content_type="application/json")
-    return rsp
+    if request.method == "GET":
+        res = AddressResource.get_all_addresses()
+        rsp = Response(json.dumps(res), status=200,
+                       content_type="application/json")
+        return rsp
 
 
-@app.route('/addresses/<address_id>', methods=['GET', 'PUT', 'DELETE'])
+    # res = AddressResource.get_by_template(None)
+    # rsp = Response(json.dumps(res, default=str), status=200,
+    #                content_type="application/json")
+    # return rsp
+
+
+@app.route('/address/<address_id>', methods=['GET', 'PUT', 'DELETE'])
 def specific_address(address_id):
     # res = RDBService.get_by_prefix(db_schema, table_name, column_name, prefix)
     # rsp = Response(json.dumps(res, default=str), status=200,
