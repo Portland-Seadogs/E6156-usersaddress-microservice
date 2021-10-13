@@ -96,40 +96,63 @@ def get_user_address(user_id):
 
 @app.route('/address', methods=['GET', 'POST'])
 def address_collection():
-    # res = RDBService.get_by_prefix(db_schema, table_name, column_name, prefix)
-    # rsp = Response(json.dumps(res, default=str), status=200,
-    #                content_type="application/json")
-    # return rsp
     if request.method == "GET":
         res = AddressResource.get_all_addresses()
         rsp = Response(json.dumps(res), status=200,
                        content_type="application/json")
         return rsp
 
+    if request.method == "POST":
+        # TODO: add error checking
+        # TODO: ID should automatically update and return correct value
+        new_address_info = request.json
+        res = AddressResource.add_new_address(new_address_info)
+        rsp = Response(
+            json.dumps(res), status=200, content_type="application/json"
+        )
+        return rsp
 
-    # res = AddressResource.get_by_template(None)
-    # rsp = Response(json.dumps(res, default=str), status=200,
-    #                content_type="application/json")
-    # return rsp
 
-
-@app.route('/address/<address_id>', methods=['GET', 'PUT', 'DELETE'])
-def specific_address(address_id):
-    # res = RDBService.get_by_prefix(db_schema, table_name, column_name, prefix)
-    # rsp = Response(json.dumps(res, default=str), status=200,
-    #                content_type="application/json")
-    # return rsp
-    if request.method == 'GET':
-        res = AddressResource.get_address_record(address_id)
-        rsp = Response(json.dumps(res, default=str), status=200,
+@app.route('/address/<id>', methods=['GET', 'PUT', 'DELETE'])
+def specific_address(id):
+    if request.method == "GET":
+        res = AddressResource.get_address_record(id)
+        rsp = Response(json.dumps(res), status=200,
                        content_type="application/json")
         return rsp
-    if request.method == 'PUT':
-        pass  # NOT SURE WHAT TO DO FOR PUT
-    if request.method == 'DELETE':
-        res = AddressResource.delete_address(address_id)
-        rsp = Response(json.dumps(res, default=str), status=200,
-                       content_type="application/json")
+
+    if request.method == "PUT":
+        fields_to_update = request.get_json()
+        res = AddressResource.update_address(id, fields_to_update)
+
+        if res == 1:
+            fields_to_update.update({"id": id, "status": "updated"})
+            rsp = Response(
+                json.dumps(fields_to_update), status=200, content_type="application/json"
+            )
+        else:
+            rsp = Response(
+                json.dumps({"id": id, "status": "error"}),
+                status=500,
+                content_type="application/json",
+            )
+        return rsp
+
+    if request.method == "DELETE":
+        res = AddressResource.delete_address(id)
+
+        if res == 1:
+            rsp = Response(
+                json.dumps({"id": id, "status": "deleted"}),
+                status=200,
+                content_type="application/json",
+            )
+        else:
+            rsp = Response(
+                json.dumps({"id": id, "status": "error"}),
+                status=500,
+                content_type="application/json",
+            )
         return rsp
 
 

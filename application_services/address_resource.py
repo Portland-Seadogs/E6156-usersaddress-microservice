@@ -34,7 +34,7 @@ class AddressResource(BaseApplicationResource):
     @classmethod
     def get_address_record(cls, address_id):
         records = d_service.find_by_template(
-            cls.db_schema, cls.table_name, {"addressID": address_id}
+            cls.db_schema, cls.table_name, {"ID": address_id}
         )
         return cls.get_links(records)
 
@@ -48,11 +48,11 @@ class AddressResource(BaseApplicationResource):
     @classmethod
     def update_address(cls, address_id, updated_information):
         return d_service.update_record(
-            cls.db_schema, cls.table_name, "address_id", address_id, **updated_information
+            cls.db_schema, cls.table_name, "ID", address_id, **updated_information
         )
 
     @classmethod
     def delete_address(cls, address_id):
         return d_service.delete_record_by_key(
-            cls.db_schema, cls.table_name, "address_id", address_id
+            cls.db_schema, cls.table_name, "ID", address_id
         )
