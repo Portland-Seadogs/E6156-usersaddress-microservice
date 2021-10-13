@@ -1,5 +1,5 @@
-from application_services.BaseApplicationResource import BaseApplicationResource
-from database_services.RDBService import RDBService
+from application_services.base_application_resource import BaseApplicationResource
+from database_services.rdb_service import RDBService as d_service
 
 
 class AddressResource(BaseApplicationResource):
@@ -24,25 +24,25 @@ class AddressResource(BaseApplicationResource):
 
     @classmethod
     def get_address_record(cls, address_id):
-        return RDBService.find_by_template(
+        return d_service.find_by_template(
             cls.db_schema, cls.table_name, {"address_id": address_id}
         )
 
     @classmethod
     def delete_address(cls, address_id):
-        return RDBService.delete_record_by_key(
+        return d_service.delete_record_by_key(
             cls.db_schema, cls.table_name, "address_id", address_id
         )
 
     @classmethod
     def add_new_address(cls, address_information):
-        new_record_id = RDBService.create_new_record(
+        new_record_id = d_service.create_new_record(
             cls.db_schema, cls.table_name, **address_information
         )
         return {"address_id": new_record_id}
 
     @classmethod
     def update_address(cls, address_id, updated_information):
-        return RDBService.update_record(
+        return d_service.update_record(
             cls.db_schema, cls.table_name, "address_id", address_id, **updated_information
         )
