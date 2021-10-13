@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # setup environment parameters
-export DBHOST=localhost
+export DBHOST=
 export DBUSER=
 export DBPASSWORD=
 export FLASK_APP='application.py'
