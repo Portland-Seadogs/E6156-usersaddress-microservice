@@ -336,12 +336,12 @@ paths:
         - developers
       summary: Deletes an address by ID
       operationId: deleteAddress
-      description: Deletes a address. 
+      description: Deletes an address. 
       parameters:
         - in: path
           name: addressId
           required: true
-          description: ID of the user to delete.
+          description: ID of the address to delete.
           schema:
             type: string
       responses:
@@ -375,7 +375,7 @@ paths:
               schema:
                 type: object
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/Address'
         '400':
           description: bad input parameter
     post:
@@ -395,8 +395,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
-        description: User to add, except for ID. Application set ID.
+              $ref: '#/components/schemas/Address'
+        description: Address to add, except for ID. Application set ID.
 components:
   schemas:
     User:
