@@ -5,6 +5,7 @@ use `UsersAddresses`;
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `address`;
 
+
 create table users
 (
 	ID int auto_increment,
