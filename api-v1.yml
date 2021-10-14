@@ -1,0 +1,430 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/donff2/F21User/1.0.0
+info:
+  description: This is a simple API
+  version: "1.0.0"
+  title: Simple User and Address API
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: administrators
+    description: Secured Admin-only calls
+  - name: developers
+    description: Operations available to regular developers
+paths:
+  /users:
+    get:
+      tags:
+        - developers
+      summary: Resource for creating, reading, updating, etc. users.
+      operationId: getUsers
+      description: |
+        By passing in the appropriate options, you can search for
+        and retrieve information about users. 
+      parameters:
+        - in: query
+          name: searchString
+          description: Optional query string in standard format.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: bad input parameter
+    post:
+      tags:
+        - developers
+      summary: creates a user
+      operationId: addUser
+      description: Obvious
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: Duplicate email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: User to add, except for ID. Application set ID.
+  /users/{userId}:
+    put:
+      tags:
+        - developers
+      summary: Updates a user
+      operationId: updateUser
+      description: Updates a user. Cannot change ID.
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user to update.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User updated
+        '400':
+          description: Something bad happened.
+        '404':
+          description: Not found.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: User to update, except for ID. Application set ID.
+    get:
+      tags:
+        - developers
+      summary: Gets a user by ID
+      operationId: getUser
+      description: Gets a user. 
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user to get.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User identified by the ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Something bad happened.
+        '404':
+          description: Not found.
+    delete:
+      tags:
+        - developers
+      summary: Deletes a user by ID
+      operationId: deleteUser
+      description: Deletes a user. 
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user to delete.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted.
+        '404':
+          description: Not found.
+        '400':
+          description: Something bad happened.
+  /users/{userId}/address:
+    post:
+      tags:
+        - developers
+      summary:  Creates the address for the user.
+      operationId: createUserAddress
+      description: Obvious
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user to update.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Address created.
+        '400':
+          description: Something bad happened.
+        '404':
+          description: Not found.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+        description: Address information.
+    put:
+      tags:
+        - developers
+      summary: Updates a user's address
+      operationId: updateUserAddress
+      description: Obvious.
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user whose address to update.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Address updated.
+        '400':
+          description: Something bad happened.
+        '404':
+          description: Not found.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: User to update, except for ID. Application set ID.
+    get:
+      tags:
+        - developers
+      summary: Gets a user's address.
+      operationId: getUserAddress
+      description: Obvious
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user whose address to get.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User identified by the ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Something bad happened.
+        '404':
+          description: Not found.
+    delete:
+      tags:
+        - developers
+      summary: Deletes a user's address
+      operationId: deleteUserAddress
+      description: Obvious
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user to delete.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted.
+        '404':
+          description: Not found.
+        '400':
+          description: Something bad happened.
+  /addresses:
+    get:
+      tags:
+        - developers
+      summary: Resource for creating, reading, updating, etc. addresses.
+      operationId: getAddresses
+      description: |
+        By passing in the appropriate options, you can search for
+        and retrieve information about addresses. 
+      parameters:
+        - in: query
+          name: searchString
+          description: Optional query string in standard format.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: bad input parameter
+    post:
+      tags:
+        - developers
+      summary: Creates an address
+      operationId: addAddress
+      description: Obvious
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: Duplicate address
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: User to add, except for ID. Application set ID.
+  /addresses/{addressId}:
+    put:
+      tags:
+        - developers
+      summary: Updates an address by ID. 
+      operationId: updateAddress
+      description: Updates an address. Cannot change ID.
+      parameters:
+        - in: path
+          name: addressId
+          required: true
+          description: ID of the address to update.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Address updated
+        '400':
+          description: Something bad happened.
+        '404':
+          description: Not found.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+        description: Address to update, except for ID. Application set ID.
+    get:
+      tags:
+        - developers
+      summary: Gets a user by ID
+      operationId: getUser
+      description: Gets a user. 
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user to get.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User identified by the ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Something bad happened.
+        '404':
+          description: Not found.
+    delete:
+      tags:
+        - developers
+      summary: Deletes a user by ID
+      operationId: deleteUser
+      description: Deletes a user. 
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user to delete.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted.
+        '404':
+          description: Not found.
+        '400':
+          description: Something bad happened.
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - email
+        - nameLast
+        - nameFirst
+        - createdDate
+      properties:
+        id:
+          type: string
+          example: Will be something like a UNI.
+        email:
+          type: string
+          format: email
+          example: cool.dude@contonoso.org
+        nameLast:
+          type: string
+          example: Smith
+        nameFirst:
+          type: string
+          example: John
+        createdData:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        links:
+          $ref: "#/components/schemas/Links"
+    Address:
+      required:
+        - streetNumber
+        - streetName1
+        - streetName2
+        - cityName
+        - regionName
+        - postalCode
+      properties:
+        streetNumber:
+          type: string
+          example: 123
+        streetName1:
+          type: string
+          example: Baker St.
+        streetName2:
+          type: string
+          example: Apt. 2C
+        cityName:
+          type: string
+          example: Podunk
+        regionName:
+          type: string
+          example: East Nowhere
+        postalCode:
+          type: string
+          example: 10027
+        countryName:
+          type: string
+          example: United States of America
+    Link:
+      type: object
+      required:
+        - rel
+        - href
+      properties:
+        rel:
+          type: string
+          example: 'some_relationship'
+        href:
+          type: string
+          format: url
+          example: /some/url
+    Links:
+      type: array
+      items:
+        $ref: "#/components/schemas/Link"
