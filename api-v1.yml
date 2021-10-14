@@ -234,7 +234,124 @@ paths:
           description: Not found.
         '400':
           description: Something bad happened.
-  /addresses:
+  /address:
+    get:
+      tags:
+        - developers
+      summary: Resource for creating, reading, updating, etc. addresses.
+      operationId: getAddresses
+      description: |
+        By passing in the appropriate options, you can search for
+        and retrieve information about addresses. 
+      parameters:
+        - in: query
+          name: searchString
+          description: Optional query string in standard format.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Address'
+        '400':
+          description: bad input parameter
+    post:
+      tags:
+        - developers
+      summary: Creates an address
+      operationId: addAddress
+      description: Obvious
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: Duplicate address
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+        description: User to add, except for ID. Application set ID.
+  /address/{addressId}:
+    put:
+      tags:
+        - developers
+      summary: Updates an address by ID. 
+      operationId: updateAddress
+      description: Updates an address. Cannot change ID.
+      parameters:
+        - in: path
+          name: addressId
+          required: true
+          description: ID of the address to update.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Address updated
+        '400':
+          description: Something bad happened.
+        '404':
+          description: Not found.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+        description: Address to update, except for ID. Application set ID.
+    get:
+      tags:
+        - developers
+      summary: Gets a user by ID
+      operationId: getUser
+      description: Gets a user. 
+      parameters:
+        - in: path
+          name: addressId
+          required: true
+          description: ID of the user to get.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User identified by the ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '400':
+          description: Something bad happened.
+        '404':
+          description: Not found.
+    delete:
+      tags:
+        - developers
+      summary: Deletes an address by ID
+      operationId: deleteAddress
+      description: Deletes a address. 
+      parameters:
+        - in: path
+          name: addressId
+          required: true
+          description: ID of the user to delete.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted.
+        '404':
+          description: Not found.
+        '400':
+          description: Something bad happened.
+  /address/{addressId}/users:
     get:
       tags:
         - developers
@@ -280,77 +397,6 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
         description: User to add, except for ID. Application set ID.
-  /addresses/{addressId}:
-    put:
-      tags:
-        - developers
-      summary: Updates an address by ID. 
-      operationId: updateAddress
-      description: Updates an address. Cannot change ID.
-      parameters:
-        - in: path
-          name: addressId
-          required: true
-          description: ID of the address to update.
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Address updated
-        '400':
-          description: Something bad happened.
-        '404':
-          description: Not found.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Address'
-        description: Address to update, except for ID. Application set ID.
-    get:
-      tags:
-        - developers
-      summary: Gets a user by ID
-      operationId: getUser
-      description: Gets a user. 
-      parameters:
-        - in: path
-          name: userId
-          required: true
-          description: ID of the user to get.
-          schema:
-            type: string
-      responses:
-        '200':
-          description: User identified by the ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Something bad happened.
-        '404':
-          description: Not found.
-    delete:
-      tags:
-        - developers
-      summary: Deletes a user by ID
-      operationId: deleteUser
-      description: Deletes a user. 
-      parameters:
-        - in: path
-          name: userId
-          required: true
-          description: ID of the user to delete.
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Successfully deleted.
-        '404':
-          description: Not found.
-        '400':
-          description: Something bad happened.
 components:
   schemas:
     User:
