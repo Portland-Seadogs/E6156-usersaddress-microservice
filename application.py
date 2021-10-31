@@ -2,6 +2,7 @@ from flask import Flask, Response, request
 from flask_cors import CORS
 from application_services.users_resource import UsersResource
 from application_services.address_resource import AddressResource
+from middleware.Security.security import Security
 import json
 import logging
 
@@ -94,6 +95,7 @@ def get_user_address(user_id):
         # TODO: implement...not sure what post should do here
         pass
 
+
 @app.route('/address', methods=['GET', 'POST'])
 def address_collection():
     if request.method == "GET":
@@ -169,6 +171,18 @@ def get_address_users(address_id):
     if request.method == "POST":
         # TODO: Implement this! not exactly sure what this would do
         pass
+
+
+@app.before_request
+def verify_oauth_token():
+    """
+    Method to run before all requests; determines if a user has a valid
+    Google OAuth2 token and uses the token to discover who the user making the request is.
+    The user is then loaded in from the database and stored in a special flask object called 'g'.
+    While g is not appropriate for storing data across requests, it provides a global namespace
+    for holding any data you want during a single backend context.
+    """
+    return Security.verify_token(request)
 
 
 if __name__ == "__main__":
