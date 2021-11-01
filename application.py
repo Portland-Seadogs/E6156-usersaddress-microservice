@@ -182,6 +182,7 @@ def verify_oauth_token():
     While g is not appropriate for storing data across requests, it provides a global namespace
     for holding any data you want during a single backend context.
     """
+    # print(request.endpoint)
     return Security.verify_token(request)
 
 

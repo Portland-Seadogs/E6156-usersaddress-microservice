@@ -2,8 +2,10 @@
 Google Authentication Class to help with authentication of
 the submitted Oauth token.
 """
-import requests
 from flask import g
+
+login_required_paths = {"health_check"}
+login_not_required_paths = {"health_check"}
 
 
 class Security:
@@ -15,38 +17,46 @@ class Security:
         The implementation of verification of token; separated from the method
         above for ease in testing.
         """
-        if 'Authorization' not in incoming_request.headers:
-            return {'message': 'Request denied access',
-                    'reason': 'Authorization header missing. Please provide an '
-                              'OAuth2 Token with your request'}, 400
+        if incoming_request.endpoint in login_not_required_paths:
+            return None
+        elif incoming_request.endpoint in login_required_paths:
 
-        auth_header = incoming_request.headers.get('Authorization')
-        if 'Bearer ' not in auth_header:
-            return {'message': 'Request denied access',
-                    'reason': "Malformed authorization header provided. Please make sure to "
-                              "specify the header prefix correctly as 'Bearer ' and try again."}, 400
-
-        # validate the token with Google
-        access_token = auth_header.split("Bearer ")[1]
-
-        is_valid, validation = is_valid_token(access_token)
-        if not is_valid:
-            return {'message': 'Request denied access',
-                    'reason': f'Google rejected oauth2 token: {validation["error_description"]}'}, 401
-
-        g.access_token = access_token
-
-        # unless this is a registration attempt, find the user associated with access token
-        if incoming_request.endpoint != 'registration':
-            user = User.find_by_g_id(validation['user_id'])
-            if not user:
+            if 'Authorization' not in incoming_request.headers:
                 return {'message': 'Request denied access',
-                        'reason': 'User is not yet registered with this application; please '
-                                  'register before proceeding'}, 401
+                        'reason': 'Authorization header missing. Please provide an '
+                        'OAuth2 Token with your request'}, 400
 
-            # save this user for the rest of the request processing
-            g.user = user
-        return None  # hurray no issues!
+            auth_header = incoming_request.headers.get('Authorization')
+            if 'Bearer ' not in auth_header:
+                return {'message': 'Request denied access',
+                        'reason': "Malformed authorization header provided. Please make sure to "
+                        "specify the header prefix correctly as 'Bearer ' and try again."}, 400
+
+            # validate the token with Google
+            access_token = auth_header.split("Bearer ")[1]
+
+            is_valid, validation = is_valid_token(access_token)
+            if not is_valid:
+                return {'message': 'Request denied access',
+                        'reason': f'Google rejected oauth2 token: {validation["error_description"]}'}, 401
+
+            g.access_token = access_token
+
+            # unless this is a registration attempt, find the user associated with access token
+            if incoming_request.endpoint != 'registration':
+                user = User.find_by_g_id(validation['user_id'])
+                if not user:
+                    return {'message': 'Request denied access',
+                            'reason': 'User is not yet registered with this application; please '
+                            'register before proceeding'}, 401
+
+                # save this user for the rest of the request processing
+                g.user = user
+            return None  # hurray no issues!
+
+        else:
+            return {'message': 'Route not found!',
+                    'reason': 'This route does not exist silly!'}, 404
 
     def is_valid_token(token):
         """
