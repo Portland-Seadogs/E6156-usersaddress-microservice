@@ -1,8 +1,9 @@
-from flask import Flask, Response, request
+from flask import Flask, Response, request, redirect, url_for
 from flask_cors import CORS
 from application_services.users_resource import UsersResource
 from application_services.address_resource import AddressResource
 from middleware.Security.security import Security
+from flask_dance.contrib.google import make_google_blueprint, google
 import json
 import logging
 
@@ -12,10 +13,26 @@ logger = logging.getLogger()
 application = app = Flask(__name__)
 CORS(app)
 
+app.secret_key = "supersekrit"
+blueprint = make_google_blueprint(
+    client_id="945712068833-q1d78dtar0s7urc051m3v4un0k6i8mgl.apps.googleusercontent.com",
+    client_secret="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",
+    scope=["profile", "email"]
+)
+
+app.register_blueprint(blueprint, url_prefix="/login")
+
 
 @app.route("/")
-def health_check():
-    return "<u>Hello World</u>"
+def index():
+    if not google.authorized:
+        return redirect(url_for("google.login"))
+    # resp = google.get("/plus/v1/people/me")
+    # assert resp.ok, resp.text
+    resp = google.get("/oauth2/v1/userinfo")
+    assert resp.ok, resp.text
+    # return "You are {email} on Google".format(email=resp.json()["emails"][0]["value"])
+    return "You are {email} on Google".format(email=resp.json()["email"])
 
 
 @app.route("/users", methods=["GET", "POST"])
@@ -183,6 +200,8 @@ def verify_oauth_token():
     for holding any data you want during a single backend context.
     """
     # print(request.endpoint)
+    # routes = list(app.url_map.iter_rules())
+    # print(list(routes))
     return Security.verify_token(request)
 
 

@@ -3,9 +3,12 @@ Google Authentication Class to help with authentication of
 the submitted Oauth token.
 """
 from flask import g
+from middleware.Security.google_auth import GoogleAuth
 
-login_required_paths = {"health_check"}
-login_not_required_paths = {"health_check"}
+login_required_paths = {"get_all_users", "get_user", "get_user_address",
+                        "address_collection", "specific_address",
+                        "get_address_users"}
+# login_not_required_paths = {"index", "login/google"}
 
 
 class Security:
@@ -17,9 +20,10 @@ class Security:
         The implementation of verification of token; separated from the method
         above for ease in testing.
         """
-        if incoming_request.endpoint in login_not_required_paths:
-            return None
-        elif incoming_request.endpoint in login_required_paths:
+        # if incoming_request.endpoint in login_not_required_paths:
+        #     return None
+        # elif incoming_request.endpoint in login_required_paths:
+        if incoming_request.endpoint in login_required_paths:
 
             if 'Authorization' not in incoming_request.headers:
                 return {'message': 'Request denied access',
@@ -55,6 +59,7 @@ class Security:
             return None  # hurray no issues!
 
         else:
+            return None
             return {'message': 'Route not found!',
                     'reason': 'This route does not exist silly!'}, 404
 
