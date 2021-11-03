@@ -4,6 +4,8 @@ from application_services.users_resource import UsersResource
 from application_services.address_resource import AddressResource
 from middleware.Security.security import Security
 from flask_dance.contrib.google import make_google_blueprint, google
+from middleware.service_factory import ServiceFactory
+from address_services.base_address_service import AddressDataTransferObject
 import json
 import logging
 
@@ -39,7 +41,7 @@ def index():
 def get_all_users():
     if request.method == "GET":
         address_id = request.args.get("addressID")
-        # TODO : make query parameter filtering more general?
+        # TODO : make query parameter filtering more general
         if address_id:
             res = UsersResource.retrieve_filtered_records_by_address(
                 address_id)
@@ -122,9 +124,19 @@ def address_collection():
         return rsp
 
     if request.method == "POST":
-        # TODO: add error checking
-        # TODO: ID should automatically update and return correct value
         new_address_info = request.json
+        address_service = ServiceFactory.get_address_service()
+        dto = AddressDataTransferObject()
+        dto.load(request.json)
+        valid_address = address_service.verify_address(dto)
+        if not valid_address:
+            rsp = Response(
+                json.dumps({"status": "error: invalid address"}),
+                status=400,
+                content_type="application/json",
+            )
+            return rsp
+
         res = AddressResource.add_new_address(new_address_info)
         rsp = Response(
             json.dumps(res), status=200, content_type="application/json"
@@ -140,6 +152,7 @@ def specific_address(id):
                        content_type="application/json")
         return rsp
 
+    # TODO: verify addresses with PUT...
     if request.method == "PUT":
         fields_to_update = request.get_json()
         res = AddressResource.update_address(id, fields_to_update)
