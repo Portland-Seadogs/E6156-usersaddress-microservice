@@ -13,13 +13,16 @@ class AddressResource(BaseApplicationResource):
     @classmethod
     def get_links(cls, resource_data):
         for r in resource_data:
-            address_id = r.get('ID')
+            address_id = r.get("ID")
             links = []
             self_link = {"rel": "self", "href": "/address/" + str(address_id)}
             links.append(self_link)
 
             if address_id is not None:
-                address_link = {"rel": "users", "href": "/users?addressID=" + str(address_id)}
+                address_link = {
+                    "rel": "users",
+                    "href": "/users?addressID=" + str(address_id),
+                }
                 links.append(address_link)
 
             r["links"] = links
@@ -27,8 +30,7 @@ class AddressResource(BaseApplicationResource):
 
     @classmethod
     def get_all_addresses(cls):
-        records = d_service.fetch_all_records(
-            cls.db_schema, cls.table_name)
+        records = d_service.fetch_all_records(cls.db_schema, cls.table_name)
         return cls.get_links(records)
 
     @classmethod

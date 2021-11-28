@@ -12,8 +12,8 @@ class UsersResource(BaseApplicationResource):
     @classmethod
     def get_links(cls, resource_data):
         for r in resource_data:
-            address_id = r.get('addressID')
-            user_id = r.get('ID')
+            address_id = r.get("addressID")
+            user_id = r.get("ID")
             links = []
             self_link = {"rel": "self", "href": "/users/" + str(user_id)}
             links.append(self_link)
@@ -38,10 +38,8 @@ class UsersResource(BaseApplicationResource):
         return cls.get_links(record)
 
     @classmethod
-    def retrieve_filtered_records_by_address(cls, address_id):
-        records = d_service.find_by_template(
-            cls.db_schema, cls.table_name, {"addressID": address_id}
-        )
+    def retrieve_records_by_template(cls, template):
+        records = d_service.find_by_template(cls.db_schema, cls.table_name, template)
         return cls.get_links(records)
 
     @classmethod
