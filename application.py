@@ -39,7 +39,7 @@ def health_check():
     return "Hello World"
 
 
-@app.route("/users", methods=["GET"])
+@app.route("/api/users", methods=["GET"])
 def get_all_users():
     template = {}
     if request.args.get("addressID"):
@@ -55,7 +55,7 @@ def get_all_users():
     return rsp
 
 
-@app.route("/users", methods=["POST"])
+@app.route("/api/users", methods=["POST"])
 def create_new_user():
     # TODO: add error checking
     new_user_info = request.json
@@ -65,7 +65,7 @@ def create_new_user():
     return rsp
 
 
-@app.route("/users/<id>", methods=["GET", "PUT", "DELETE"])
+@app.route("/api/users/<id>", methods=["GET", "PUT", "DELETE"])
 def get_user(id):
     if request.method == "GET":
         res = UsersResource.retrieve_single_record(id)
@@ -108,7 +108,7 @@ def get_user(id):
         return rsp
 
 
-@app.route("/users/<user_id>/address", methods=["GET", "POST"])
+@app.route("/api/users/<user_id>/address", methods=["GET", "POST"])
 def get_user_address(user_id):
     if request.method == "GET":
         addressID = UsersResource.retrieve_addressid_for_userid(user_id)
@@ -120,7 +120,7 @@ def get_user_address(user_id):
         pass
 
 
-@app.route("/address", methods=["GET", "POST"])
+@app.route("/api/address", methods=["GET", "POST"])
 def address_collection():
     if request.method == "GET":
         res = AddressResource.get_all_addresses()
@@ -146,7 +146,7 @@ def address_collection():
         return rsp
 
 
-@app.route("/address/<id>", methods=["GET", "PUT", "DELETE"])
+@app.route("/api/address/<id>", methods=["GET", "PUT", "DELETE"])
 def specific_address(id):
     if request.method == "GET":
         res = AddressResource.get_address_record(id)
@@ -190,7 +190,7 @@ def specific_address(id):
         return rsp
 
 
-@app.route("/address/<address_id>/users", methods=["GET"])
+@app.route("/api/address/<address_id>/users", methods=["GET"])
 def get_address_users(address_id):
     res = UsersResource.retrieve_filtered_records_by_address(address_id)
     rsp = Response(json.dumps(res), status=200, content_type="application/json")
