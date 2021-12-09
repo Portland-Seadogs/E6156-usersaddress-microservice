@@ -7,4 +7,4 @@ export DBPASSWORD=
 export FLASK_APP='application.py'
 
 # ready to run actual app
-flask run
+flask run --host=0.0.0.0 --port=8888
