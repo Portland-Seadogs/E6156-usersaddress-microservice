@@ -102,7 +102,7 @@ def get_user(id):
         return rsp
 
 
-@app.route('/users/<user_id>/address', methods=['GET', 'POST'])
+@app.route('/users/<user_id>/address', methods=['GET'])
 def get_user_address(user_id):
     if request.method == 'GET':
         addressID = UsersResource.retrieve_addressid_for_userid(user_id)
@@ -110,9 +110,6 @@ def get_user_address(user_id):
         rsp = Response(json.dumps(res), status=200,
                        content_type="application/json")
         return rsp
-    if request.method == "POST":
-        # TODO: implement...not sure what post should do here
-        pass
 
 
 @app.route('/address', methods=['GET', 'POST'])
@@ -188,7 +185,7 @@ def specific_address(id):
         return rsp
 
 
-@app.route('/address/<address_id>/users', methods=['GET', 'POST'])
+@app.route('/address/<address_id>/users', methods=['GET'])
 def get_address_users(address_id):
     if request.method == "GET":
         # gets all the users at address address_id
@@ -198,9 +195,6 @@ def get_address_users(address_id):
         rsp = Response(json.dumps(res), status=200,
                        content_type="application/json")
         return rsp
-    if request.method == "POST":
-        # TODO: Implement this! not exactly sure what this would do
-        pass
 
 
 @app.before_request
